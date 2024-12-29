@@ -1,0 +1,1 @@
+export PYTHONPATH=D:/PyCharmProject/nna_24-25_pham/:$PYTHONPATH
