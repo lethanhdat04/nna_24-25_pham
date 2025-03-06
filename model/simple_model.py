@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 
-class ReLU_Network(nn.Module):
+class FFN_Network(nn.Module):
     def __init__(self, input_dim, hidden_layers, hidden_units, output_dim=1):
-        super(ReLU_Network, self).__init__()
+        super(FFN_Network, self).__init__()
         layers = []
         layers.append(nn.Linear(input_dim, hidden_units))
         layers.append(nn.ReLU())
