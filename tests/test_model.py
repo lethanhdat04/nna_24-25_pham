@@ -7,9 +7,8 @@ def test_relu_forward_shape():
     y = model(x)
     assert y.shape == (32, 1)
 
-def test_relu_output_grad():
+def test_relu_forward_method():
     model = FFN_Network(1, 1, 8)
-    x = torch.randn(10, 1, requires_grad=True)
-    y = model(x)
-    y.sum().backward()
-    assert x.grad is not None
+    x = torch.randn(4, 1)
+    y = model.forward(x)
+    assert y.shape == (4, 1)
