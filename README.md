@@ -22,34 +22,27 @@ project/
 ├── utils/          # Training, evaluation, visualizers
 ├── tests/          # Unit tests for CI/CD
 ├── experiments/    # Main notebook with theory & results
+├── .gitlab-ci.yml  # GitLab Actions CI
+├── setup.py        # Python-based environment setup
+├── requirements.txt
+├── README.md
 ```
 
 ---
 
 ## ⚙️ Setup
 
-### 🔧 Linux / macOS
-
 ```bash
-bash setup.sh
+python setup.py
 ```
 
-### 🪟 Windows
-
-```bat
-setup.bat
-```
-
----
-
-## 🚀 Quick Start
+Then activate virtual environment and launch:
 
 ```bash
-source .venv/bin/activate   # or .venv\Scripts\activate on Windows
+source .venv/bin/activate      # Linux/macOS
+.venv\Scripts\activate.bat     # Windows
 jupyter notebook
 ```
-
-Then open `experiments/notebook.ipynb`.
 
 ---
 
@@ -63,4 +56,4 @@ pytest tests/
 
 ## 📌 CI/CD
 
-GitHub Actions automatically runs tests on push/pull. See `.gitlab-ci.yml`.
+GitLab Actions automatically runs tests on push/pull. See `.gitlab-ci.yml`.
