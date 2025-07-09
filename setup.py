@@ -1,8 +1,7 @@
-import os
 import platform
 import subprocess
 
-PYTHON = "python3.12"  # <--- Update here
+PYTHON = "py -3.12"  # <--- Update here
 
 def run(command):
     subprocess.run(command, shell=True, check=True)

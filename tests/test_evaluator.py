@@ -1,4 +1,4 @@
-# Auto-generated tests for /mnt/data/evaluator.py
+# Auto-generated tests for /utils/evaluator.py
 import pytest
 import utils.evaluator
 

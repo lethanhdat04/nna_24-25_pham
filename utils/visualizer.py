@@ -61,74 +61,28 @@ def plot_results_1d(X_train, y_train, X_test, y_test, y_pred,
 
     plt.close()
 
-def plot_results_2d(X_test, y_test, y_pred, 
-                    title,
-                    history, 
-                    plotsize=(15, 5), 
-                    save_path: str = None):
-    """
-    Plot training history, actual vs predicted values with correlation, 
-    and residuals histogram for 2D data.
-    
-    Parameters
-    ----------
-    X_test : np.ndarray of shape (n_samples, 2)
-        The test input points.
-    y_test : np.ndarray of shape (n_samples,)
-        The actual output function values.
-    y_pred : np.ndarray of shape (n_samples,)
-        The predicted output function values.
-    title : str
-        Title for the entire figure.
-    history : dict
-        Dictionary containing 'train_loss' and 'val_loss'.
-    plotsize : tuple (default=(15,5))
-        Figure size.
-    save_path : str or None
-        Path to save the figure. If None, shows the plot.
-    """
-    
-    plt.figure(figsize=plotsize)
+def plot_approximations(xs, ys, approx_axon, approx_relu, func_label="f(x)"):
+    plt.figure(figsize=(12, 5))
 
-    # Plot Training and Validation Loss
-    plt.subplot(1, 3, 1)
-    plt.plot(history['train_loss'], label='Train Loss')
-    plt.plot(history['val_loss'], label='Validation Loss')
-    plt.title('Training History')
-    plt.xlabel('Epoch')
-    plt.ylabel('MSE Loss')
+    # Axon plot
+    plt.subplot(1, 2, 1)
+    plt.plot(xs, ys, label=f'Target: ${func_label}$')
+    plt.plot(xs, approx_axon, '--', label='Axon Approximation')
+    plt.title("Axon Approximation")
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
     plt.legend()
+    plt.grid(True)
 
-    # Scatter Plot of Actual vs Predicted with Correlation
-    plt.subplot(1, 3, 2)
-    plt.scatter(y_test, y_pred, alpha=0.6, edgecolors='w', linewidth=0.5)
-    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
-    plt.title('Actual vs Predicted')
-    plt.xlabel('Actual')
-    plt.ylabel('Predicted')
-    
-    # Calculate Pearson Correlation
-    corr_coef, p_value = pearsonr(y_test, y_pred)
-    plt.text(0.05, 0.95, f'Pearson r = {corr_coef:.3f}', 
-             transform=plt.gca().transAxes, 
-             fontsize=12, 
-             verticalalignment='top',
-             bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-    
-    # Residuals Histogram
-    plt.subplot(1, 3, 3)
-    residuals = y_test - y_pred
-    sns.histplot(residuals, kde=True, bins=30, color='skyblue')
-    plt.title('Residuals Histogram')
-    plt.xlabel('Residual')
-    plt.ylabel('Frequency')
+    # ReLU network plot
+    plt.subplot(1, 2, 2)
+    plt.plot(xs, ys, label=f'Target: ${func_label}$')
+    plt.plot(xs, approx_relu, '--', label='ReLU Network')
+    plt.title("Traditional ReLU Network")
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
+    plt.legend()
+    plt.grid(True)
 
-    plt.suptitle(title, fontsize=16, y=1.02)
     plt.tight_layout()
-    
-    if save_path:
-        plt.savefig(save_path, bbox_inches='tight')
-    else:
-        plt.show()
-
-    plt.close()
+    plt.show()

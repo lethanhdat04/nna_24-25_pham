@@ -51,7 +51,7 @@ class ReluSegmentNetwork(nn.Module):
             x_i, x_next = self.x_points[i], self.x_points[i + 1]
             O_i = sign_k * F.relu(abs_k * (F.relu(x - x_i) - F.relu(x - x_next)))
             segment_outputs.append(O_i)
-        return base_value, segment_outputs
+        return base_value + sum(segment_outputs)
     
 
 class FixedWidthReluNetwork(nn.Module):
@@ -100,3 +100,43 @@ class FixedWidthReluNetwork(nn.Module):
             O_i = self.slopes[i] * (sigma_x_minus_xi - sigma_x_minus_xnext)
             f_x += O_i
         return f_x
+
+
+class ReluSegmentNetwork2D(nn.Module):
+    def __init__(self, x_points, y_points, z_grid):
+        super(ReluSegmentNetwork2D, self).__init__()
+        self.x_points = torch.tensor(x_points, dtype=torch.float32)
+        self.y_points = torch.tensor(y_points, dtype=torch.float32)
+        self.z_grid = torch.tensor(z_grid, dtype=torch.float32)
+
+    def forward(self, x, y):
+        result = torch.zeros_like(x)
+        
+        for i in range(len(self.x_points) - 1):
+            for j in range(len(self.y_points) - 1):
+                x0, x1 = self.x_points[i], self.x_points[i + 1]
+                y0, y1 = self.y_points[j], self.y_points[j + 1]
+                
+                char_x = (F.relu(x - x0) - F.relu(x - x1)) / (x1 - x0)
+                char_y = (F.relu(y - y0) - F.relu(y - y1)) / (y1 - y0)
+                char_func = char_x * char_y
+                
+                # Bilinear-interpolation
+                z00 = self.z_grid[i][j]
+                z10 = self.z_grid[i + 1][j]
+                z01 = self.z_grid[i][j + 1]
+                z11 = self.z_grid[i + 1][j + 1]
+                
+                dx = x1 - x0
+                dy = y1 - y0
+                
+                a = z00
+                b = (z10 - z00) / dx
+                c = (z01 - z00) / dy
+                d = (z11 - z10 - z01 + z00) / (dx * dy)
+                
+                bilinear = a + b * x + c * y + d * x * y
+                
+                result += bilinear * char_func
+        
+        return result

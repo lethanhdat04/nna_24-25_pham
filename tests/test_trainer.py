@@ -1,4 +1,4 @@
-# Auto-generated tests for /mnt/data/trainer.py
+# Auto-generated tests for /utils/trainer.py
 import pytest
 import utils.trainer
 
