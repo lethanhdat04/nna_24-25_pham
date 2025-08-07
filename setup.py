@@ -15,6 +15,6 @@ activate = f"{venv_dir}\\Scripts\\activate.bat" if is_windows else f"source {ven
 print(f"Activate with: {activate}")
 
 # Install deps
-pip = f"{venv_dir}\\Scripts\\pip" if is_windows else f"{venv_dir}/bin/pip"
-run(f"{pip} install --upgrade pip")
-run(f"{pip} install -r requirements.txt")
+python_exec = f"{venv_dir}\\Scripts\\python" if is_windows else f"{venv_dir}/bin/python"
+run(f"{python_exec} -m pip install --upgrade pip")
+run(f"{python_exec} -m pip install -r requirements.txt")

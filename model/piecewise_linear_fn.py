@@ -130,12 +130,13 @@ class ReluSegmentNetwork2D(nn.Module):
                 dx = x1 - x0
                 dy = y1 - y0
                 
-                a = z00
-                b = (z10 - z00) / dx
-                c = (z01 - z00) / dy
-                d = (z11 - z10 - z01 + z00) / (dx * dy)
-                
-                bilinear = a + b * x + c * y + d * x * y
+                x_rel = (x - x0) / dx
+                y_rel = (y - y0) / dy
+
+                bilinear = (z00 * (1 - x_rel) * (1 - y_rel) + 
+                            z10 * x_rel * (1 - y_rel) + 
+                            z01 * (1 - x_rel) * y_rel + 
+                            z11 * x_rel * y_rel)
                 
                 result += bilinear * char_func
         

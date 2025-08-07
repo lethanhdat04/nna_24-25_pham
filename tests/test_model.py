@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 from model.simple_model import FFN_Network
 from model.piecewise_linear_fn import *
 
@@ -35,6 +36,20 @@ def test_relu_segment_network_forward_values():
     # Expected output is the value at the segment corresponding to 0.5
     expected = 1 + (2 - 1) * 0.5  # = 1.5
     assert torch.allclose(output, torch.tensor([expected], dtype=torch.float32), atol=1e-4)
+
+def test_relu_segment_network_2D_forward_values():
+    x_points = np.array([0.0, 1.0])
+    y_points = np.array([0.0, 1.0])
+    z_grid = np.array([[1.0, 2.0], [3.0, 4.0]])
+    model = ReluSegmentNetwork2D(x_points, y_points, z_grid)
+    
+    # Test with a point that falls in the first segment (0.5, 0.5)
+    x_input = torch.tensor([0.5], dtype=torch.float32)
+    y_input = torch.tensor([0.5], dtype=torch.float32)
+    output = model.forward(x_input, y_input)
+    expected = torch.tensor([0.625], dtype=torch.float32) 
+    
+    assert torch.allclose(output, expected, atol=1e-6)
 
 def test_relu_segment_network_2D_forward_shape():
     x_points = np.array([0.0, 1.0])
