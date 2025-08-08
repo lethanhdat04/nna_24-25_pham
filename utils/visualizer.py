@@ -86,3 +86,61 @@ def plot_approximations(xs, ys, approx_axon, approx_relu, func_label="f(x)"):
 
     plt.tight_layout()
     plt.show()
+
+def analyze_and_plot_errors(target_function, function_name, 
+                           latex_name, xs, ys, approx_axon, approx_relu):
+    """
+    Complete error analysis and visualization for a single function
+    """
+    
+    print(f"Computing errors for {function_name}...")
+    
+    # Compute errors
+    error_axon = np.abs(ys - approx_axon)
+    error_relu = np.abs(ys - approx_relu)
+    
+    # Compute statistics
+    mae_axon = np.mean(error_axon)
+    mae_relu = np.mean(error_relu)
+    max_error_axon = np.max(error_axon)
+    max_error_relu = np.max(error_relu)
+    rmse_axon = np.sqrt(np.mean(error_axon**2))
+    rmse_relu = np.sqrt(np.mean(error_relu**2))
+    
+    # Create visualization
+    fig, ax = plt.subplots(figsize=(8, 6))
+    
+    x_vals = xs.flatten()
+    ax.plot(x_vals, error_axon, 'b-', linewidth=2, 
+            label=f'Growing Axons (MAE: {mae_axon:.4f})', alpha=0.8)
+    ax.plot(x_vals, error_relu, 'r--', linewidth=2, 
+            label=f'Traditional ReLU (MAE: {mae_relu:.4f})', alpha=0.8)
+    
+    ax.set_title(f'Approximation Error: $f(x) = {latex_name}$', fontsize=14)
+    ax.set_xlabel('x', fontsize=12)
+    ax.set_ylabel('|f(x) - f\'(x)|', fontsize=12)
+    ax.legend(fontsize=10)
+    ax.grid(True, alpha=0.3)
+    ax.set_yscale('log')
+    
+    plt.tight_layout()
+    
+    plt.show()
+    
+    # Return complete results
+    return {
+        'function': function_name,
+        'latex': latex_name,
+        'mae_axon': mae_axon,
+        'mae_relu': mae_relu,
+        'max_error_axon': max_error_axon,
+        'max_error_relu': max_error_relu,
+        'rmse_axon': rmse_axon,
+        'rmse_relu': rmse_relu,
+        'xs': xs,
+        'ys': ys,
+        'error_axon': error_axon,
+        'error_relu': error_relu,
+        'figure': fig,
+        'axis': ax
+    }
